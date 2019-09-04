@@ -77,5 +77,7 @@ typedef struct{
 	Stop   StopBits;
 }UART_Cfg;
 
+extern UART_Cfg UARTconfig;
+
 
 #endif /* UART_CONFIG_H_ */
