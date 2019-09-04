@@ -39,13 +39,7 @@
 #define UART_RXC_VECT		13
 #define UART_UDR_VECT		14
 
-
-//# define sei()  __asm__ __volatile__ ("sei" ::: "memory")
-
 #define ISR(INTNUM) void __vector_##INTNUM (void) __attribute__ ((signal,used, externally_visible));\
 void __vector_##INTNUM (void)
-
-
-
 
 #endif /* INTERRUPT_H_ */

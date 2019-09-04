@@ -475,21 +475,21 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xeb3
+.debug_info     0x00000000      0xeb6
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x4e6 E:/program files/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_info    0x000004e6      0x118 DIO.o
  .debug_info    0x000005fe      0x268 main.o
- .debug_info    0x00000866      0x442 UART.o
- .debug_info    0x00000ca8      0x20b UART_config.o
+ .debug_info    0x00000866      0x445 UART.o
+ .debug_info    0x00000cab      0x20b UART_config.o
 
-.debug_abbrev   0x00000000      0x83b
+.debug_abbrev   0x00000000      0x875
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x4a3 E:/program files/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_abbrev  0x000004a3       0x9a DIO.o
  .debug_abbrev  0x0000053d      0x138 main.o
- .debug_abbrev  0x00000675      0x159 UART.o
- .debug_abbrev  0x000007ce       0x6d UART_config.o
+ .debug_abbrev  0x00000675      0x193 UART.o
+ .debug_abbrev  0x00000808       0x6d UART_config.o
 
 .debug_line     0x00000000      0x8d0
  *(.debug_line .debug_line.* .debug_line_end)
@@ -505,17 +505,17 @@ END GROUP
  .debug_frame   0x00000044       0x24 main.o
  .debug_frame   0x00000068       0xe0 UART.o
 
-.debug_str      0x00000000      0x6b7
+.debug_str      0x00000000      0x65e
  *(.debug_str)
  .debug_str     0x00000000      0x196 E:/program files/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_str     0x00000196      0x1b4 DIO.o
                                 0x1e8 (size before relaxing)
  .debug_str     0x0000034a       0x95 main.o
                                 0x255 (size before relaxing)
- .debug_str     0x000003df      0x2c5 UART.o
-                                0x42b (size before relaxing)
- .debug_str     0x000006a4       0x13 UART_config.o
-                                0x34a (size before relaxing)
+ .debug_str     0x000003df      0x26c UART.o
+                                0x437 (size before relaxing)
+ .debug_str     0x0000064b       0x13 UART_config.o
+                                0x356 (size before relaxing)
 
 .debug_loc      0x00000000      0x886
  *(.debug_loc)

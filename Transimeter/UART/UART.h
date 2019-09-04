@@ -50,16 +50,6 @@
 #define UMSEL (6u)
 #define URSEL (7u)
 
-
-
-
-
-
-#define N			100								//number of elments in transmit string array
-
-
-#define NULL_PTR			((void*)0U)
-
 extern Status UART_Init (void);
 extern Status UART_SendChar (uint8 a_data);
 extern Status UART_Send (const uint8* a_data_ptr);
@@ -67,12 +57,5 @@ extern Status UART_ReceiveChar(uint8* a_data);
 extern Status UART_Receive (uint8* a_data);
 extern Status UART_Start (void);
 extern Status UART_Stop (void);
-
-
-/*void vUART_TransmitChar (unsigned char);
-void vUART_TransmitString (unsigned char *);
-unsigned char ucUART_Recive (void);*/
-
-
 
 #endif /* UART_H_ */

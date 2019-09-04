@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 000000c8  00000000  00000000  00000600  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000eb3  00000000  00000000  000006c8  2**0
+  6 .debug_info   00000eb6  00000000  00000000  000006c8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000083b  00000000  00000000  0000157b  2**0
+  7 .debug_abbrev 00000875  00000000  00000000  0000157e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000008d0  00000000  00000000  00001db6  2**0
+  8 .debug_line   000008d0  00000000  00000000  00001df3  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000148  00000000  00000000  00002688  2**2
+  9 .debug_frame  00000148  00000000  00000000  000026c4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000006b7  00000000  00000000  000027d0  2**0
+ 10 .debug_str    0000065e  00000000  00000000  0000280c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000886  00000000  00000000  00002e87  2**0
+ 11 .debug_loc    00000886  00000000  00000000  00002e6a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000098  00000000  00000000  0000370d  2**0
+ 12 .debug_ranges 00000098  00000000  00000000  000036f0  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -496,6 +496,12 @@ int main(void)
  2b0:	ca cf       	rjmp	.-108    	; 0x246 <main+0xc>
 
 000002b2 <UART_Init>:
+	{
+		return NotOk;
+	}
+	
+	return OK;
+}
  2b2:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <UARTconfig+0x2>
  2b6:	81 11       	cpse	r24, r1
  2b8:	23 c0       	rjmp	.+70     	; 0x300 <UART_Init+0x4e>
@@ -688,57 +694,152 @@ int main(void)
  440:	08 95       	ret
 
 00000442 <UART_Start>:
+ *		Outputs:		None
+ * Return:			Status to check function execution
+ *******************************************************************************/
+Status UART_Start (void)
+{
+	SetBit(UCSRB,TXEN);
  442:	53 9a       	sbi	0x0a, 3	; 10
+	SetBit(UCSRB,RXEN);
  444:	54 9a       	sbi	0x0a, 4	; 10
+	
+	/*Check TX compelet interrupt Enable bit*/
+	if (UARTconfig.TxcInterrupt == TxcInterruptDisable)
  446:	80 91 64 00 	lds	r24, 0x0064	; 0x800064 <UARTconfig+0x4>
  44a:	81 11       	cpse	r24, r1
  44c:	02 c0       	rjmp	.+4      	; 0x452 <UART_Start+0x10>
+	{
+		ClrBit(UCSRB,TXCIE);
  44e:	56 98       	cbi	0x0a, 6	; 10
  450:	06 c0       	rjmp	.+12     	; 0x45e <UART_Start+0x1c>
+	}
+	else if (UARTconfig.TxcInterrupt == TxcInterruptEnable)
  452:	81 30       	cpi	r24, 0x01	; 1
  454:	f9 f4       	brne	.+62     	; 0x494 <UART_Start+0x52>
+	{
+		SetBit(UCSRB,TXCIE);
  456:	56 9a       	sbi	0x0a, 6	; 10
+		SetBit(SREG,I);
  458:	8f b7       	in	r24, 0x3f	; 63
  45a:	80 68       	ori	r24, 0x80	; 128
  45c:	8f bf       	out	0x3f, r24	; 63
+	{
+		return NotOk;
+	}
+	
+	/*Check RX comolete interrupt Enable bit*/
+	if (UARTconfig.RxcInterrupt == RxcInterruptDisable)
  45e:	80 91 63 00 	lds	r24, 0x0063	; 0x800063 <UARTconfig+0x3>
  462:	81 11       	cpse	r24, r1
  464:	02 c0       	rjmp	.+4      	; 0x46a <UART_Start+0x28>
+	{
+		ClrBit(UCSRB,RXCIE);
  466:	57 98       	cbi	0x0a, 7	; 10
  468:	06 c0       	rjmp	.+12     	; 0x476 <UART_Start+0x34>
+	}
+	else if (UARTconfig.RxcInterrupt == RxcInterruptEnable)
  46a:	81 30       	cpi	r24, 0x01	; 1
  46c:	a9 f4       	brne	.+42     	; 0x498 <UART_Start+0x56>
+	{
+		SetBit(UCSRB,RXCIE);
  46e:	57 9a       	sbi	0x0a, 7	; 10
+		SetBit(SREG,I);
  470:	8f b7       	in	r24, 0x3f	; 63
  472:	80 68       	ori	r24, 0x80	; 128
  474:	8f bf       	out	0x3f, r24	; 63
+	{
+		return NotOk;
+	}
+	
+	/*Check UDR Empty interrupt Enable bit*/
+	if (UARTconfig.UDRInterrupt == UDRInterruptDisable)
  476:	80 91 65 00 	lds	r24, 0x0065	; 0x800065 <UARTconfig+0x5>
  47a:	81 11       	cpse	r24, r1
  47c:	03 c0       	rjmp	.+6      	; 0x484 <UART_Start+0x42>
+	{
+		ClrBit(UCSRB,UDRIE);
  47e:	55 98       	cbi	0x0a, 5	; 10
+	else
+	{
+		return NotOk;
+	}
+	
+	return OK;
  480:	81 e0       	ldi	r24, 0x01	; 1
  482:	08 95       	ret
+	/*Check UDR Empty interrupt Enable bit*/
+	if (UARTconfig.UDRInterrupt == UDRInterruptDisable)
+	{
+		ClrBit(UCSRB,UDRIE);
+	}
+	else if (UARTconfig.UDRInterrupt == UDRInterruptEnable)
  484:	81 30       	cpi	r24, 0x01	; 1
  486:	51 f4       	brne	.+20     	; 0x49c <UART_Start+0x5a>
+	{
+		SetBit(UCSRB,UDRIE);
  488:	55 9a       	sbi	0x0a, 5	; 10
+		SetBit(SREG,I);
  48a:	8f b7       	in	r24, 0x3f	; 63
  48c:	80 68       	ori	r24, 0x80	; 128
  48e:	8f bf       	out	0x3f, r24	; 63
+	else
+	{
+		return NotOk;
+	}
+	
+	return OK;
  490:	81 e0       	ldi	r24, 0x01	; 1
  492:	08 95       	ret
+		SetBit(UCSRB,TXCIE);
+		SetBit(SREG,I);
+	}
+	else
+	{
+		return NotOk;
  494:	80 e0       	ldi	r24, 0x00	; 0
  496:	08 95       	ret
+		SetBit(UCSRB,RXCIE);
+		SetBit(SREG,I);
+	}
+	else
+	{
+		return NotOk;
  498:	80 e0       	ldi	r24, 0x00	; 0
  49a:	08 95       	ret
+		SetBit(UCSRB,UDRIE);
+		SetBit(SREG,I);
+	}
+	else
+	{
+		return NotOk;
  49c:	80 e0       	ldi	r24, 0x00	; 0
+	}
+	
+	return OK;
+}
  49e:	08 95       	ret
 
 000004a0 <UART_Stop>:
+ *		Outputs:		None
+ * Return:			Status to check function execution
+ *******************************************************************************/
+Status UART_Stop (void)
+{
+	ClrBit(UCSRB,TXEN);
  4a0:	53 98       	cbi	0x0a, 3	; 10
+	ClrBit(UCSRB,RXEN);
  4a2:	54 98       	cbi	0x0a, 4	; 10
+	
+	ClrBit(UCSRB,UDRIE);
  4a4:	55 98       	cbi	0x0a, 5	; 10
+	ClrBit(UCSRB,RXCIE);
  4a6:	57 98       	cbi	0x0a, 7	; 10
+	ClrBit(UCSRB,TXCIE);
  4a8:	56 98       	cbi	0x0a, 6	; 10
+	
+	return OK;
+}
  4aa:	81 e0       	ldi	r24, 0x01	; 1
  4ac:	08 95       	ret
 

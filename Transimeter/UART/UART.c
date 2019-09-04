@@ -30,6 +30,14 @@ ISR(USART_RXC_vect)
 	flag = 1;
 }
 
+/*******************************************************************************
+ * Function Name:	UART_Init
+ * Description: 	*used to intialize UART module
+ * parameters:
+ *		Inputs:			None
+ *		Outputs:		None
+ * Return:			Status to check function execution
+ *******************************************************************************/
 Status UART_Init (void)
 {
 	/*Check Double speed bits & Calculate UBRR value*/
@@ -133,7 +141,14 @@ Status UART_Init (void)
 	return OK;
 }
 
-
+/*******************************************************************************
+ * Function Name:	UART_SendChar
+ * Description: 	*used to Send a byte
+ * parameters:
+ *		Inputs:			data to send
+ *		Outputs:		None
+ * Return:			Status to check function execution
+ *******************************************************************************/
 Status UART_SendChar (uint8 a_data)
 {
 	if (UARTconfig.UDRInterrupt == UDRInterruptDisable)
@@ -152,7 +167,16 @@ Status UART_SendChar (uint8 a_data)
 	
 	return OK;
 }
+/*******************************************************************************/
 
+/*******************************************************************************
+ * Function Name:	UART_Send
+ * Description: 	*used to send a string of bytes
+ * parameters:
+ *		Inputs:			String to send
+ *		Outputs:		None
+ * Return:			Status to check function execution
+ *******************************************************************************/
 Status UART_Send (const uint8* a_data_ptr)
 {
 	uint32 loopindex = 0;
@@ -179,9 +203,11 @@ Status UART_Send (const uint8* a_data_ptr)
 	
 	return OK;
 }
+/*******************************************************************************/
+
 
 /*******************************************************************************
- * Function Name:	UART_Receive_Byte
+ * Function Name:	UART_ReceiveChar
  * Description: 	*used to receive a byte
  * parameters:
  *		Inputs:			None
@@ -218,9 +244,10 @@ Status UART_ReceiveChar(uint8* a_data)
 	
 	return OK;
 }
+/*******************************************************************************/
 
 /*******************************************************************************
- * Function Name:	UART_Receive_String
+ * Function Name:	UART_Receive
  * Description: 	*used to receive string of Bytes
  * parameters:
  *		Inputs:			None
@@ -267,7 +294,14 @@ Status UART_Receive (uint8* a_data)
 }
 /*******************************************************************************/
 
-
+/*******************************************************************************
+ * Function Name:	UART_Start
+ * Description: 	*used to Start the communication
+ * parameters:
+ *		Inputs:			None
+ *		Outputs:		None
+ * Return:			Status to check function execution
+ *******************************************************************************/
 Status UART_Start (void)
 {
 	SetBit(UCSRB,TXEN);
@@ -320,7 +354,16 @@ Status UART_Start (void)
 	
 	return OK;
 }
+/*******************************************************************************/
 
+/*******************************************************************************
+ * Function Name:	UART_Stop
+ * Description: 	*used to Stop the communication
+ * parameters:
+ *		Inputs:			None
+ *		Outputs:		None
+ * Return:			Status to check function execution
+ *******************************************************************************/
 Status UART_Stop (void)
 {
 	ClrBit(UCSRB,TXEN);
@@ -332,46 +375,4 @@ Status UART_Stop (void)
 	
 	return OK;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*void vUART_TransmitChar (unsigned char data)
-{
-	while((UCSRA & (1<<UDRE)) == 0);					//wait until UART Data Reg is Empty (UDRE) (0 wait , 1 Empty you can transmit now)
-	UDR = data;											//write in UART Data Reg and then transmit it
-}
-
-unsigned char ucUART_Recive (void)
-{
-	while((UCSRA & (1<<RXC)) == 0);						//wait until RX Complete (UDRE) (0 Receive Reg is empty , 1 there is new data in Receive Reg)
-	return UDR;											//return UART Data Reg
-	
-}
-
-void vUART_TransmitString (unsigned char *string)
-{
-	uint8_t i=0;
-	while(string[i] != '\0')
-	{
-		vUART_TransmitChar(string[i]);
-		i++;
-	}
-	
-	//unsigned char i;
-	//for(i=0;i<N;i++)
-	//{
-		//while((UCSRA & (1<<UDRE)) == 0);
-		//UDR = string[i];
-	//}
-}*/
+/*******************************************************************************/

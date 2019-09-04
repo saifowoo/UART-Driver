@@ -480,19 +480,19 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xc3d
+.debug_info     0x00000000      0xc40
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x4e6 E:/program files/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_info    0x000004e6      0x10a main.o
- .debug_info    0x000005f0      0x442 UART.o
- .debug_info    0x00000a32      0x20b UART_config.o
+ .debug_info    0x000005f0      0x445 UART.o
+ .debug_info    0x00000a35      0x20b UART_config.o
 
-.debug_abbrev   0x00000000      0x706
+.debug_abbrev   0x00000000      0x740
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x4a3 E:/program files/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_abbrev  0x000004a3       0x9d main.o
- .debug_abbrev  0x00000540      0x159 UART.o
- .debug_abbrev  0x00000699       0x6d UART_config.o
+ .debug_abbrev  0x00000540      0x193 UART.o
+ .debug_abbrev  0x000006d3       0x6d UART_config.o
 
 .debug_line     0x00000000      0x62a
  *(.debug_line .debug_line.* .debug_line_end)
@@ -506,15 +506,15 @@ END GROUP
  .debug_frame   0x00000000       0x34 main.o
  .debug_frame   0x00000034       0xe0 UART.o
 
-.debug_str      0x00000000      0x61b
+.debug_str      0x00000000      0x5c2
  *(.debug_str)
  .debug_str     0x00000000      0x196 E:/program files/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_str     0x00000196      0x1b0 main.o
                                 0x1d7 (size before relaxing)
- .debug_str     0x00000346      0x2c2 UART.o
-                                0x42b (size before relaxing)
- .debug_str     0x00000608       0x13 UART_config.o
-                                0x34a (size before relaxing)
+ .debug_str     0x00000346      0x269 UART.o
+                                0x434 (size before relaxing)
+ .debug_str     0x000005af       0x13 UART_config.o
+                                0x353 (size before relaxing)
 
 .debug_loc      0x00000000      0x309
  *(.debug_loc)
