@@ -9,10 +9,25 @@
 #include "Interrupt.h"
 
 static volatile uint8 UARTisr_g = 0;
+static volatile uint8 index = 0;
+static volatile uint8 flag = 0;
 
-ISR(UART_TXC_VECT)
+/* ISR for UDR vector */
+ISR(UART_UDR_VECT)
 {
-	UDR = UARTisr_g;
+	if (UARTisr_g != 0)
+	{
+		UDR = UARTisr_g;
+		index++;
+		UARTisr_g = 0;
+	}
+	
+}
+
+/* ISR for receive vector */
+ISR(USART_RXC_vect)
+{
+	flag = 1;
 }
 
 Status UART_Init (void)
@@ -134,18 +149,124 @@ Status UART_SendChar (uint8 a_data)
 	{
 		return NotOk;
 	}
+	
 	return OK;
 }
 
 Status UART_Send (const uint8* a_data_ptr)
 {
-	uint32 index = 0;
-	for (index=0 ; a_data_ptr[index] != '\0' ; index++)
+	uint32 loopindex = 0;
+	
+	if (UARTconfig.UDRInterrupt == UDRInterruptDisable)
 	{
-		UART_SendChar(a_data_ptr[index]);
+		for (loopindex=0 ; a_data_ptr[loopindex] != '\0' ; loopindex++)
+		{
+			UART_SendChar(a_data_ptr[loopindex]);
+		}
 	}
+	else if (UARTconfig.UDRInterrupt == UDRInterruptEnable)
+	{
+		index = 0;
+		while (a_data_ptr[index] != '\0')
+		{
+			UART_SendChar(a_data_ptr[index]);
+		}
+	}
+	else
+	{
+		return NotOk;
+	}
+	
 	return OK;
 }
+
+/*******************************************************************************
+ * Function Name:	UART_Receive_Byte
+ * Description: 	*used to receive a byte
+ * parameters:
+ *		Inputs:			None
+ *		Outputs:		received data
+ * Return:			Status to check function execution
+ *******************************************************************************/
+Status UART_ReceiveChar(uint8* a_data)
+{
+	if (UARTconfig.RxcInterrupt == RxcInterruptDisable)
+	{
+		/* Wait for data to be received */
+		while ( !(UCSRA & (1<<RXC)) );
+		/* Receive data from receiver buffer */
+		*a_data = UDR;
+	}
+	else if(UARTconfig.RxcInterrupt == RxcInterruptEnable)
+	{
+		/* ISR will be executed */	
+		if (flag == 1)
+		{
+			*a_data = UDR;
+			flag = 0;
+		}
+		else
+		{
+			/* To avoid garbage value */
+			*a_data = 0;
+		}
+	}
+	else
+	{
+		return NotOk;
+	}	
+	
+	return OK;
+}
+
+/*******************************************************************************
+ * Function Name:	UART_Receive_String
+ * Description: 	*used to receive string of Bytes
+ * parameters:
+ *		Inputs:			None
+ *		Outputs:		String of received data
+ * Return:			Status to check function execution
+ *******************************************************************************/
+Status UART_Receive (uint8* a_data)
+{
+	static uint8 counter_looper = 0;
+
+	if (UARTconfig.RxcInterrupt == RxcInterruptDisable)
+	{
+		while(UDR != '#')
+		{
+			UART_ReceiveChar(&a_data[counter_looper]);
+			counter_looper++;
+		}
+		counter_looper=0;
+		
+	}
+	else if(UARTconfig.RxcInterrupt == RxcInterruptEnable)
+	{
+		/* ISR will be executed */
+		if(UDR != '#')
+		{
+			UART_ReceiveChar(&a_data[counter_looper]);
+			/* Garbage value detection */
+			if (a_data[counter_looper] != 0)
+			{
+				counter_looper++;
+			}
+		}
+		else
+		{
+			counter_looper=0;
+		}
+	}
+	else
+	{
+		return NotOk;
+	}
+	
+	return OK;
+}
+/*******************************************************************************/
+
 
 Status UART_Start (void)
 {
@@ -156,7 +277,6 @@ Status UART_Start (void)
 	if (UARTconfig.TxcInterrupt == TxcInterruptDisable)
 	{
 		ClrBit(UCSRB,TXCIE);
-		ClrBit(SREG,I);
 	}
 	else if (UARTconfig.TxcInterrupt == TxcInterruptEnable)
 	{
@@ -172,7 +292,6 @@ Status UART_Start (void)
 	if (UARTconfig.RxcInterrupt == RxcInterruptDisable)
 	{
 		ClrBit(UCSRB,RXCIE);
-		ClrBit(SREG,I);
 	}
 	else if (UARTconfig.RxcInterrupt == RxcInterruptEnable)
 	{
@@ -188,7 +307,6 @@ Status UART_Start (void)
 	if (UARTconfig.UDRInterrupt == UDRInterruptDisable)
 	{
 		ClrBit(UCSRB,UDRIE);
-		ClrBit(SREG,I);
 	}
 	else if (UARTconfig.UDRInterrupt == UDRInterruptEnable)
 	{
@@ -210,7 +328,8 @@ Status UART_Stop (void)
 	
 	ClrBit(UCSRB,UDRIE);
 	ClrBit(UCSRB,RXCIE);
-	ClrBit(SREG,I);
+	ClrBit(UCSRB,TXCIE);
+	
 	return OK;
 }
 

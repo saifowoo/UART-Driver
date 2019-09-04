@@ -36,6 +36,9 @@
 
 #define INT2_vect_num		3
 #define UART_TXC_VECT		15
+#define UART_RXC_VECT		13
+#define UART_UDR_VECT		14
+
 
 //# define sei()  __asm__ __volatile__ ("sei" ::: "memory")
 

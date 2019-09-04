@@ -63,6 +63,8 @@
 extern Status UART_Init (void);
 extern Status UART_SendChar (uint8 a_data);
 extern Status UART_Send (const uint8* a_data_ptr);
+extern Status UART_ReceiveChar(uint8* a_data);
+extern Status UART_Receive (uint8* a_data);
 extern Status UART_Start (void);
 extern Status UART_Stop (void);
 
