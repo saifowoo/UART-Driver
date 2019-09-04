@@ -9,12 +9,15 @@
 
 int main(void)
 {
+	uint8 data = 0;
 	UART_Init();
+	UART_Start();
+	UART_Send("saif");
 	/* Replace with your application code */
     while (1) 
     {
-		UART_SendChar(1);
-		
+		UART_ReceiveChar(&data);
+		UART_SendChar(data);
     }
 }
 

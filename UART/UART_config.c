@@ -7,7 +7,7 @@
 
 #include "UART_config.h"
 
-	UART_Cfg UARTconfig = {	9600U,
+	UART_Cfg UARTconfig = {	4800U,
 							DoubleSpeedDisable,
 							RxcInterruptDisable,
 							TxcInterruptDisable,

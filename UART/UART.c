@@ -37,12 +37,12 @@ Status UART_Init (void)
 	if (UARTconfig.DoubleSpeed == DoubleSpeedDisable)
 	{
 		ClrBit(UCSRA,U2X);
-		UBRRValue = ((F_CPU)/((UARTconfig.baudrate)*(16U)))-1;
+		UBRRValue = ((F_CPU)/((UARTconfig.baudrate)*(16UL)))-1;
 	}
 	else if (UARTconfig.DoubleSpeed == DoubleSpeedEnable)
 	{
 		SetBit(UCSRA,U2X);
-		UBRRValue = ((F_CPU)/((UARTconfig.baudrate)*(8U)))-1;
+		UBRRValue = ((F_CPU)/((UARTconfig.baudrate)*(8UL)))-1;
 	}
 	else
 	{
@@ -50,14 +50,14 @@ Status UART_Init (void)
 	}
 	
 	/*Clear URSEL bit into UCSRA to write in UBRRH*/
-	ClrBit(UCSRA,URSEL);
+	ClrBit(UCSRC,URSEL);
 	
 	/*Set UBRR value into UBRRH & UBRRL*/
 	UBRRH = (uint8)(UBRRValue>>8);
 	UBRRL = (uint8)UBRRValue;
 		
 	/*Clear URSEL bit into UCSRA to write in UCSRC*/
-	SetBit(UCSRA,URSEL);
+	SetBit(UCSRC,URSEL);
 	
 	/*Check data size bits*/
 	if (UARTconfig.DataSize == DataSize5Bits)
@@ -138,7 +138,7 @@ Status UART_SendChar (uint8 a_data)
 {
 	if (UARTconfig.UDRInterrupt == UDRInterruptDisable)
 	{
-		while((UCSRA & (1<<UDRE)) == 0);					//wait until UART Data Reg is Empty (UDRE) (0 wait , 1 Empty you can transmit now)
+		while(GetBit(UCSRA,UDRE) == 0);					//wait until UART Data Reg is Empty (UDRE) (0 wait , 1 Empty you can transmit now)
 		UDR = a_data;
 	}
 	else if (UARTconfig.UDRInterrupt == UDRInterruptEnable)
@@ -270,8 +270,8 @@ Status UART_Receive (uint8* a_data)
 
 Status UART_Start (void)
 {
-	SetBit(UCSRA,TXEN);
-	SetBit(UCSRA,RXEN);
+	SetBit(UCSRB,TXEN);
+	SetBit(UCSRB,RXEN);
 	
 	/*Check TX compelet interrupt Enable bit*/
 	if (UARTconfig.TxcInterrupt == TxcInterruptDisable)
@@ -323,8 +323,8 @@ Status UART_Start (void)
 
 Status UART_Stop (void)
 {
-	ClrBit(UCSRA,TXEN);
-	ClrBit(UCSRA,RXEN);
+	ClrBit(UCSRB,TXEN);
+	ClrBit(UCSRB,RXEN);
 	
 	ClrBit(UCSRB,UDRIE);
 	ClrBit(UCSRB,RXCIE);
