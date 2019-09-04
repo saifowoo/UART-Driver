@@ -37,6 +37,7 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../DIO.c \
 ../main.c \
 ../UART.c \
 ../UART_config.c
@@ -49,21 +50,25 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+DIO.o \
 main.o \
 UART.o \
 UART_config.o
 
 OBJS_AS_ARGS +=  \
+DIO.o \
 main.o \
 UART.o \
 UART_config.o
 
 C_DEPS +=  \
+DIO.d \
 main.d \
 UART.d \
 UART_config.d
 
 C_DEPS_AS_ARGS +=  \
+DIO.d \
 main.d \
 UART.d \
 UART_config.d
@@ -82,6 +87,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

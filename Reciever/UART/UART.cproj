@@ -123,6 +123,12 @@
     <Compile Include="bitwise.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="DIO.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="DIO.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Interrupt.h">
       <SubType>compile</SubType>
     </Compile>
