@@ -31,6 +31,9 @@ int main(void)
 			_delay_ms(100);
 		}
 		UART_SendChar(UARTCounter+48);
+		UART_Stop();
+		UARTCounter = 0;
+		_delay_ms(1000);
 	}
 }
 

@@ -3,31 +3,31 @@ UART.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000004d2  00000000  00000000  00000094  2**1
+  0 .text         000004f6  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         0000000a  00800060  000004d2  00000566  2**0
+  1 .data         0000000a  00800060  000004f6  0000058a  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000001  0080006a  0080006a  00000570  2**0
+  2 .bss          00000001  0080006a  0080006a  00000594  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000570  2**0
+  3 .comment      00000030  00000000  00000000  00000594  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000005a0  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000005c4  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000c8  00000000  00000000  000005dc  2**0
+  5 .debug_aranges 000000c8  00000000  00000000  00000600  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000e5e  00000000  00000000  000006a4  2**0
+  6 .debug_info   00000eb3  00000000  00000000  000006c8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000082b  00000000  00000000  00001502  2**0
+  7 .debug_abbrev 0000083b  00000000  00000000  0000157b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000008c7  00000000  00000000  00001d2d  2**0
+  8 .debug_line   000008d0  00000000  00000000  00001db6  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000148  00000000  00000000  000025f4  2**2
+  9 .debug_frame  00000148  00000000  00000000  00002688  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000006b7  00000000  00000000  0000273c  2**0
+ 10 .debug_str    000006b7  00000000  00000000  000027d0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000087a  00000000  00000000  00002df3  2**0
+ 11 .debug_loc    00000886  00000000  00000000  00002e87  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000098  00000000  00000000  0000366d  2**0
+ 12 .debug_ranges 00000098  00000000  00000000  0000370d  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -67,7 +67,7 @@ Disassembly of section .text:
   60:	10 e0       	ldi	r17, 0x00	; 0
   62:	a0 e6       	ldi	r26, 0x60	; 96
   64:	b0 e0       	ldi	r27, 0x00	; 0
-  66:	e2 ed       	ldi	r30, 0xD2	; 210
+  66:	e6 ef       	ldi	r30, 0xF6	; 246
   68:	f4 e0       	ldi	r31, 0x04	; 4
   6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
   6c:	05 90       	lpm	r0, Z+
@@ -90,7 +90,7 @@ Disassembly of section .text:
   82:	b2 07       	cpc	r27, r18
   84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
   86:	0e 94 1d 01 	call	0x23a	; 0x23a <main>
-  8a:	0c 94 67 02 	jmp	0x4ce	; 0x4ce <_exit>
+  8a:	0c 94 79 02 	jmp	0x4f2	; 0x4f2 <_exit>
 
 0000008e <__bad_interrupt>:
   8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -403,27 +403,26 @@ int main(void)
 	uint8 UARTCounter = 0;
 	uint8 index = 0;
 	UART_Init();
- 23a:	0e 94 4e 01 	call	0x29c	; 0x29c <UART_Init>
+ 23a:	0e 94 59 01 	call	0x2b2	; 0x2b2 <UART_Init>
 	DIO_SetPinDirection(PushButton0,INPUT);
  23e:	60 e0       	ldi	r22, 0x00	; 0
  240:	84 e1       	ldi	r24, 0x14	; 20
  242:	0e 94 8e 00 	call	0x11c	; 0x11c <DIO_SetPinDirection>
-#include "DIO.h"
-#include <util/delay.h>
-
-int main(void)
-{
-	uint8 UARTCounter = 0;
- 246:	d0 e0       	ldi	r29, 0x00	; 0
+	/* Replace with your application code */
+	while (1)
+	{
+		UART_Start();
+ 246:	0e 94 21 02 	call	0x442	; 0x442 <UART_Start>
+		for (index=0;index<10;index++)
+ 24a:	c0 e0       	ldi	r28, 0x00	; 0
 	UART_Init();
 	DIO_SetPinDirection(PushButton0,INPUT);
 	/* Replace with your application code */
 	while (1)
 	{
 		UART_Start();
- 248:	0e 94 16 02 	call	0x42c	; 0x42c <UART_Start>
+ 24c:	d0 e0       	ldi	r29, 0x00	; 0
 		for (index=0;index<10;index++)
- 24c:	c0 e0       	ldi	r28, 0x00	; 0
 		{
 			if(DIO_ReadPin(PushButton0) == HIGH)
  24e:	84 e1       	ldi	r24, 0x14	; 20
@@ -482,290 +481,309 @@ int main(void)
 		UART_SendChar(UARTCounter+48);
  292:	80 e3       	ldi	r24, 0x30	; 48
  294:	8d 0f       	add	r24, r29
- 296:	0e 94 05 02 	call	0x40a	; 0x40a <UART_SendChar>
-	}
- 29a:	d6 cf       	rjmp	.-84     	; 0x248 <main+0xe>
+ 296:	0e 94 10 02 	call	0x420	; 0x420 <UART_SendChar>
+		UART_Stop();
+ 29a:	0e 94 50 02 	call	0x4a0	; 0x4a0 <UART_Stop>
+ 29e:	9f e3       	ldi	r25, 0x3F	; 63
+ 2a0:	2d e0       	ldi	r18, 0x0D	; 13
+ 2a2:	83 e0       	ldi	r24, 0x03	; 3
+ 2a4:	91 50       	subi	r25, 0x01	; 1
+ 2a6:	20 40       	sbci	r18, 0x00	; 0
+ 2a8:	80 40       	sbci	r24, 0x00	; 0
+ 2aa:	e1 f7       	brne	.-8      	; 0x2a4 <main+0x6a>
+ 2ac:	00 c0       	rjmp	.+0      	; 0x2ae <main+0x74>
+ 2ae:	00 00       	nop
+ 2b0:	ca cf       	rjmp	.-108    	; 0x246 <main+0xc>
 
-0000029c <UART_Init>:
- 29c:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <UARTconfig+0x2>
- 2a0:	81 11       	cpse	r24, r1
- 2a2:	23 c0       	rjmp	.+70     	; 0x2ea <UART_Init+0x4e>
- 2a4:	59 98       	cbi	0x0b, 1	; 11
- 2a6:	20 91 60 00 	lds	r18, 0x0060	; 0x800060 <UARTconfig>
- 2aa:	30 91 61 00 	lds	r19, 0x0061	; 0x800061 <UARTconfig+0x1>
- 2ae:	c9 01       	movw	r24, r18
- 2b0:	a0 e0       	ldi	r26, 0x00	; 0
- 2b2:	b0 e0       	ldi	r27, 0x00	; 0
- 2b4:	88 0f       	add	r24, r24
- 2b6:	99 1f       	adc	r25, r25
- 2b8:	aa 1f       	adc	r26, r26
- 2ba:	bb 1f       	adc	r27, r27
- 2bc:	88 0f       	add	r24, r24
- 2be:	99 1f       	adc	r25, r25
- 2c0:	aa 1f       	adc	r26, r26
- 2c2:	bb 1f       	adc	r27, r27
- 2c4:	9c 01       	movw	r18, r24
- 2c6:	ad 01       	movw	r20, r26
- 2c8:	22 0f       	add	r18, r18
- 2ca:	33 1f       	adc	r19, r19
- 2cc:	44 1f       	adc	r20, r20
- 2ce:	55 1f       	adc	r21, r21
- 2d0:	22 0f       	add	r18, r18
- 2d2:	33 1f       	adc	r19, r19
- 2d4:	44 1f       	adc	r20, r20
- 2d6:	55 1f       	adc	r21, r21
- 2d8:	60 e4       	ldi	r22, 0x40	; 64
- 2da:	72 e4       	ldi	r23, 0x42	; 66
- 2dc:	8f e0       	ldi	r24, 0x0F	; 15
- 2de:	90 e0       	ldi	r25, 0x00	; 0
- 2e0:	0e 94 45 02 	call	0x48a	; 0x48a <__udivmodsi4>
- 2e4:	21 50       	subi	r18, 0x01	; 1
- 2e6:	31 09       	sbc	r19, r1
- 2e8:	21 c0       	rjmp	.+66     	; 0x32c <UART_Init+0x90>
- 2ea:	81 30       	cpi	r24, 0x01	; 1
- 2ec:	09 f0       	breq	.+2      	; 0x2f0 <UART_Init+0x54>
- 2ee:	85 c0       	rjmp	.+266    	; 0x3fa <UART_Init+0x15e>
- 2f0:	59 9a       	sbi	0x0b, 1	; 11
- 2f2:	20 91 60 00 	lds	r18, 0x0060	; 0x800060 <UARTconfig>
- 2f6:	30 91 61 00 	lds	r19, 0x0061	; 0x800061 <UARTconfig+0x1>
- 2fa:	c9 01       	movw	r24, r18
- 2fc:	a0 e0       	ldi	r26, 0x00	; 0
- 2fe:	b0 e0       	ldi	r27, 0x00	; 0
- 300:	88 0f       	add	r24, r24
- 302:	99 1f       	adc	r25, r25
- 304:	aa 1f       	adc	r26, r26
- 306:	bb 1f       	adc	r27, r27
- 308:	88 0f       	add	r24, r24
- 30a:	99 1f       	adc	r25, r25
- 30c:	aa 1f       	adc	r26, r26
- 30e:	bb 1f       	adc	r27, r27
- 310:	9c 01       	movw	r18, r24
- 312:	ad 01       	movw	r20, r26
- 314:	22 0f       	add	r18, r18
- 316:	33 1f       	adc	r19, r19
- 318:	44 1f       	adc	r20, r20
- 31a:	55 1f       	adc	r21, r21
- 31c:	60 e4       	ldi	r22, 0x40	; 64
- 31e:	72 e4       	ldi	r23, 0x42	; 66
- 320:	8f e0       	ldi	r24, 0x0F	; 15
- 322:	90 e0       	ldi	r25, 0x00	; 0
- 324:	0e 94 45 02 	call	0x48a	; 0x48a <__udivmodsi4>
- 328:	21 50       	subi	r18, 0x01	; 1
- 32a:	31 09       	sbc	r19, r1
- 32c:	80 b5       	in	r24, 0x20	; 32
- 32e:	8f 77       	andi	r24, 0x7F	; 127
- 330:	80 bd       	out	0x20, r24	; 32
- 332:	30 bd       	out	0x20, r19	; 32
- 334:	29 b9       	out	0x09, r18	; 9
- 336:	80 b5       	in	r24, 0x20	; 32
- 338:	80 68       	ori	r24, 0x80	; 128
- 33a:	80 bd       	out	0x20, r24	; 32
- 33c:	80 91 66 00 	lds	r24, 0x0066	; 0x800066 <UARTconfig+0x6>
- 340:	85 30       	cpi	r24, 0x05	; 5
- 342:	41 f4       	brne	.+16     	; 0x354 <UART_Init+0xb8>
- 344:	80 b5       	in	r24, 0x20	; 32
- 346:	8d 7f       	andi	r24, 0xFD	; 253
- 348:	80 bd       	out	0x20, r24	; 32
- 34a:	80 b5       	in	r24, 0x20	; 32
- 34c:	8b 7f       	andi	r24, 0xFB	; 251
- 34e:	80 bd       	out	0x20, r24	; 32
- 350:	52 98       	cbi	0x0a, 2	; 10
- 352:	27 c0       	rjmp	.+78     	; 0x3a2 <UART_Init+0x106>
- 354:	86 30       	cpi	r24, 0x06	; 6
- 356:	41 f4       	brne	.+16     	; 0x368 <UART_Init+0xcc>
- 358:	80 b5       	in	r24, 0x20	; 32
- 35a:	82 60       	ori	r24, 0x02	; 2
- 35c:	80 bd       	out	0x20, r24	; 32
- 35e:	80 b5       	in	r24, 0x20	; 32
- 360:	8b 7f       	andi	r24, 0xFB	; 251
- 362:	80 bd       	out	0x20, r24	; 32
- 364:	52 98       	cbi	0x0a, 2	; 10
- 366:	1d c0       	rjmp	.+58     	; 0x3a2 <UART_Init+0x106>
- 368:	87 30       	cpi	r24, 0x07	; 7
- 36a:	41 f4       	brne	.+16     	; 0x37c <UART_Init+0xe0>
- 36c:	80 b5       	in	r24, 0x20	; 32
- 36e:	8d 7f       	andi	r24, 0xFD	; 253
- 370:	80 bd       	out	0x20, r24	; 32
- 372:	80 b5       	in	r24, 0x20	; 32
- 374:	84 60       	ori	r24, 0x04	; 4
- 376:	80 bd       	out	0x20, r24	; 32
- 378:	52 98       	cbi	0x0a, 2	; 10
- 37a:	13 c0       	rjmp	.+38     	; 0x3a2 <UART_Init+0x106>
- 37c:	88 30       	cpi	r24, 0x08	; 8
- 37e:	41 f4       	brne	.+16     	; 0x390 <UART_Init+0xf4>
- 380:	80 b5       	in	r24, 0x20	; 32
- 382:	82 60       	ori	r24, 0x02	; 2
- 384:	80 bd       	out	0x20, r24	; 32
- 386:	80 b5       	in	r24, 0x20	; 32
- 388:	84 60       	ori	r24, 0x04	; 4
- 38a:	80 bd       	out	0x20, r24	; 32
- 38c:	52 98       	cbi	0x0a, 2	; 10
- 38e:	09 c0       	rjmp	.+18     	; 0x3a2 <UART_Init+0x106>
- 390:	89 30       	cpi	r24, 0x09	; 9
- 392:	a9 f5       	brne	.+106    	; 0x3fe <UART_Init+0x162>
- 394:	80 b5       	in	r24, 0x20	; 32
- 396:	82 60       	ori	r24, 0x02	; 2
- 398:	80 bd       	out	0x20, r24	; 32
- 39a:	80 b5       	in	r24, 0x20	; 32
- 39c:	84 60       	ori	r24, 0x04	; 4
- 39e:	80 bd       	out	0x20, r24	; 32
- 3a0:	52 9a       	sbi	0x0a, 2	; 10
- 3a2:	80 91 67 00 	lds	r24, 0x0067	; 0x800067 <UARTconfig+0x7>
- 3a6:	81 11       	cpse	r24, r1
- 3a8:	07 c0       	rjmp	.+14     	; 0x3b8 <UART_Init+0x11c>
+000002b2 <UART_Init>:
+ 2b2:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <UARTconfig+0x2>
+ 2b6:	81 11       	cpse	r24, r1
+ 2b8:	23 c0       	rjmp	.+70     	; 0x300 <UART_Init+0x4e>
+ 2ba:	59 98       	cbi	0x0b, 1	; 11
+ 2bc:	20 91 60 00 	lds	r18, 0x0060	; 0x800060 <UARTconfig>
+ 2c0:	30 91 61 00 	lds	r19, 0x0061	; 0x800061 <UARTconfig+0x1>
+ 2c4:	c9 01       	movw	r24, r18
+ 2c6:	a0 e0       	ldi	r26, 0x00	; 0
+ 2c8:	b0 e0       	ldi	r27, 0x00	; 0
+ 2ca:	88 0f       	add	r24, r24
+ 2cc:	99 1f       	adc	r25, r25
+ 2ce:	aa 1f       	adc	r26, r26
+ 2d0:	bb 1f       	adc	r27, r27
+ 2d2:	88 0f       	add	r24, r24
+ 2d4:	99 1f       	adc	r25, r25
+ 2d6:	aa 1f       	adc	r26, r26
+ 2d8:	bb 1f       	adc	r27, r27
+ 2da:	9c 01       	movw	r18, r24
+ 2dc:	ad 01       	movw	r20, r26
+ 2de:	22 0f       	add	r18, r18
+ 2e0:	33 1f       	adc	r19, r19
+ 2e2:	44 1f       	adc	r20, r20
+ 2e4:	55 1f       	adc	r21, r21
+ 2e6:	22 0f       	add	r18, r18
+ 2e8:	33 1f       	adc	r19, r19
+ 2ea:	44 1f       	adc	r20, r20
+ 2ec:	55 1f       	adc	r21, r21
+ 2ee:	60 e4       	ldi	r22, 0x40	; 64
+ 2f0:	72 e4       	ldi	r23, 0x42	; 66
+ 2f2:	8f e0       	ldi	r24, 0x0F	; 15
+ 2f4:	90 e0       	ldi	r25, 0x00	; 0
+ 2f6:	0e 94 57 02 	call	0x4ae	; 0x4ae <__udivmodsi4>
+ 2fa:	21 50       	subi	r18, 0x01	; 1
+ 2fc:	31 09       	sbc	r19, r1
+ 2fe:	21 c0       	rjmp	.+66     	; 0x342 <UART_Init+0x90>
+ 300:	81 30       	cpi	r24, 0x01	; 1
+ 302:	09 f0       	breq	.+2      	; 0x306 <UART_Init+0x54>
+ 304:	85 c0       	rjmp	.+266    	; 0x410 <__LOCK_REGION_LENGTH__+0x10>
+ 306:	59 9a       	sbi	0x0b, 1	; 11
+ 308:	20 91 60 00 	lds	r18, 0x0060	; 0x800060 <UARTconfig>
+ 30c:	30 91 61 00 	lds	r19, 0x0061	; 0x800061 <UARTconfig+0x1>
+ 310:	c9 01       	movw	r24, r18
+ 312:	a0 e0       	ldi	r26, 0x00	; 0
+ 314:	b0 e0       	ldi	r27, 0x00	; 0
+ 316:	88 0f       	add	r24, r24
+ 318:	99 1f       	adc	r25, r25
+ 31a:	aa 1f       	adc	r26, r26
+ 31c:	bb 1f       	adc	r27, r27
+ 31e:	88 0f       	add	r24, r24
+ 320:	99 1f       	adc	r25, r25
+ 322:	aa 1f       	adc	r26, r26
+ 324:	bb 1f       	adc	r27, r27
+ 326:	9c 01       	movw	r18, r24
+ 328:	ad 01       	movw	r20, r26
+ 32a:	22 0f       	add	r18, r18
+ 32c:	33 1f       	adc	r19, r19
+ 32e:	44 1f       	adc	r20, r20
+ 330:	55 1f       	adc	r21, r21
+ 332:	60 e4       	ldi	r22, 0x40	; 64
+ 334:	72 e4       	ldi	r23, 0x42	; 66
+ 336:	8f e0       	ldi	r24, 0x0F	; 15
+ 338:	90 e0       	ldi	r25, 0x00	; 0
+ 33a:	0e 94 57 02 	call	0x4ae	; 0x4ae <__udivmodsi4>
+ 33e:	21 50       	subi	r18, 0x01	; 1
+ 340:	31 09       	sbc	r19, r1
+ 342:	80 b5       	in	r24, 0x20	; 32
+ 344:	8f 77       	andi	r24, 0x7F	; 127
+ 346:	80 bd       	out	0x20, r24	; 32
+ 348:	30 bd       	out	0x20, r19	; 32
+ 34a:	29 b9       	out	0x09, r18	; 9
+ 34c:	80 b5       	in	r24, 0x20	; 32
+ 34e:	80 68       	ori	r24, 0x80	; 128
+ 350:	80 bd       	out	0x20, r24	; 32
+ 352:	80 91 66 00 	lds	r24, 0x0066	; 0x800066 <UARTconfig+0x6>
+ 356:	85 30       	cpi	r24, 0x05	; 5
+ 358:	41 f4       	brne	.+16     	; 0x36a <UART_Init+0xb8>
+ 35a:	80 b5       	in	r24, 0x20	; 32
+ 35c:	8d 7f       	andi	r24, 0xFD	; 253
+ 35e:	80 bd       	out	0x20, r24	; 32
+ 360:	80 b5       	in	r24, 0x20	; 32
+ 362:	8b 7f       	andi	r24, 0xFB	; 251
+ 364:	80 bd       	out	0x20, r24	; 32
+ 366:	52 98       	cbi	0x0a, 2	; 10
+ 368:	27 c0       	rjmp	.+78     	; 0x3b8 <UART_Init+0x106>
+ 36a:	86 30       	cpi	r24, 0x06	; 6
+ 36c:	41 f4       	brne	.+16     	; 0x37e <UART_Init+0xcc>
+ 36e:	80 b5       	in	r24, 0x20	; 32
+ 370:	82 60       	ori	r24, 0x02	; 2
+ 372:	80 bd       	out	0x20, r24	; 32
+ 374:	80 b5       	in	r24, 0x20	; 32
+ 376:	8b 7f       	andi	r24, 0xFB	; 251
+ 378:	80 bd       	out	0x20, r24	; 32
+ 37a:	52 98       	cbi	0x0a, 2	; 10
+ 37c:	1d c0       	rjmp	.+58     	; 0x3b8 <UART_Init+0x106>
+ 37e:	87 30       	cpi	r24, 0x07	; 7
+ 380:	41 f4       	brne	.+16     	; 0x392 <UART_Init+0xe0>
+ 382:	80 b5       	in	r24, 0x20	; 32
+ 384:	8d 7f       	andi	r24, 0xFD	; 253
+ 386:	80 bd       	out	0x20, r24	; 32
+ 388:	80 b5       	in	r24, 0x20	; 32
+ 38a:	84 60       	ori	r24, 0x04	; 4
+ 38c:	80 bd       	out	0x20, r24	; 32
+ 38e:	52 98       	cbi	0x0a, 2	; 10
+ 390:	13 c0       	rjmp	.+38     	; 0x3b8 <UART_Init+0x106>
+ 392:	88 30       	cpi	r24, 0x08	; 8
+ 394:	41 f4       	brne	.+16     	; 0x3a6 <UART_Init+0xf4>
+ 396:	80 b5       	in	r24, 0x20	; 32
+ 398:	82 60       	ori	r24, 0x02	; 2
+ 39a:	80 bd       	out	0x20, r24	; 32
+ 39c:	80 b5       	in	r24, 0x20	; 32
+ 39e:	84 60       	ori	r24, 0x04	; 4
+ 3a0:	80 bd       	out	0x20, r24	; 32
+ 3a2:	52 98       	cbi	0x0a, 2	; 10
+ 3a4:	09 c0       	rjmp	.+18     	; 0x3b8 <UART_Init+0x106>
+ 3a6:	89 30       	cpi	r24, 0x09	; 9
+ 3a8:	a9 f5       	brne	.+106    	; 0x414 <__LOCK_REGION_LENGTH__+0x14>
  3aa:	80 b5       	in	r24, 0x20	; 32
- 3ac:	8f 7e       	andi	r24, 0xEF	; 239
+ 3ac:	82 60       	ori	r24, 0x02	; 2
  3ae:	80 bd       	out	0x20, r24	; 32
  3b0:	80 b5       	in	r24, 0x20	; 32
- 3b2:	8f 7d       	andi	r24, 0xDF	; 223
+ 3b2:	84 60       	ori	r24, 0x04	; 4
  3b4:	80 bd       	out	0x20, r24	; 32
- 3b6:	11 c0       	rjmp	.+34     	; 0x3da <UART_Init+0x13e>
- 3b8:	81 30       	cpi	r24, 0x01	; 1
- 3ba:	39 f4       	brne	.+14     	; 0x3ca <UART_Init+0x12e>
- 3bc:	80 b5       	in	r24, 0x20	; 32
- 3be:	80 61       	ori	r24, 0x10	; 16
- 3c0:	80 bd       	out	0x20, r24	; 32
- 3c2:	80 b5       	in	r24, 0x20	; 32
- 3c4:	80 62       	ori	r24, 0x20	; 32
- 3c6:	80 bd       	out	0x20, r24	; 32
- 3c8:	08 c0       	rjmp	.+16     	; 0x3da <UART_Init+0x13e>
- 3ca:	82 30       	cpi	r24, 0x02	; 2
- 3cc:	d1 f4       	brne	.+52     	; 0x402 <__LOCK_REGION_LENGTH__+0x2>
- 3ce:	80 b5       	in	r24, 0x20	; 32
- 3d0:	8f 7e       	andi	r24, 0xEF	; 239
- 3d2:	80 bd       	out	0x20, r24	; 32
- 3d4:	80 b5       	in	r24, 0x20	; 32
- 3d6:	80 62       	ori	r24, 0x20	; 32
- 3d8:	80 bd       	out	0x20, r24	; 32
- 3da:	80 91 68 00 	lds	r24, 0x0068	; 0x800068 <UARTconfig+0x8>
- 3de:	81 30       	cpi	r24, 0x01	; 1
- 3e0:	29 f4       	brne	.+10     	; 0x3ec <UART_Init+0x150>
- 3e2:	80 b5       	in	r24, 0x20	; 32
- 3e4:	87 7f       	andi	r24, 0xF7	; 247
- 3e6:	80 bd       	out	0x20, r24	; 32
- 3e8:	81 e0       	ldi	r24, 0x01	; 1
- 3ea:	08 95       	ret
- 3ec:	82 30       	cpi	r24, 0x02	; 2
- 3ee:	59 f4       	brne	.+22     	; 0x406 <__LOCK_REGION_LENGTH__+0x6>
- 3f0:	80 b5       	in	r24, 0x20	; 32
- 3f2:	88 60       	ori	r24, 0x08	; 8
- 3f4:	80 bd       	out	0x20, r24	; 32
- 3f6:	81 e0       	ldi	r24, 0x01	; 1
- 3f8:	08 95       	ret
- 3fa:	80 e0       	ldi	r24, 0x00	; 0
- 3fc:	08 95       	ret
- 3fe:	80 e0       	ldi	r24, 0x00	; 0
+ 3b6:	52 9a       	sbi	0x0a, 2	; 10
+ 3b8:	80 91 67 00 	lds	r24, 0x0067	; 0x800067 <UARTconfig+0x7>
+ 3bc:	81 11       	cpse	r24, r1
+ 3be:	07 c0       	rjmp	.+14     	; 0x3ce <UART_Init+0x11c>
+ 3c0:	80 b5       	in	r24, 0x20	; 32
+ 3c2:	8f 7e       	andi	r24, 0xEF	; 239
+ 3c4:	80 bd       	out	0x20, r24	; 32
+ 3c6:	80 b5       	in	r24, 0x20	; 32
+ 3c8:	8f 7d       	andi	r24, 0xDF	; 223
+ 3ca:	80 bd       	out	0x20, r24	; 32
+ 3cc:	11 c0       	rjmp	.+34     	; 0x3f0 <UART_Init+0x13e>
+ 3ce:	81 30       	cpi	r24, 0x01	; 1
+ 3d0:	39 f4       	brne	.+14     	; 0x3e0 <UART_Init+0x12e>
+ 3d2:	80 b5       	in	r24, 0x20	; 32
+ 3d4:	80 61       	ori	r24, 0x10	; 16
+ 3d6:	80 bd       	out	0x20, r24	; 32
+ 3d8:	80 b5       	in	r24, 0x20	; 32
+ 3da:	80 62       	ori	r24, 0x20	; 32
+ 3dc:	80 bd       	out	0x20, r24	; 32
+ 3de:	08 c0       	rjmp	.+16     	; 0x3f0 <UART_Init+0x13e>
+ 3e0:	82 30       	cpi	r24, 0x02	; 2
+ 3e2:	d1 f4       	brne	.+52     	; 0x418 <__LOCK_REGION_LENGTH__+0x18>
+ 3e4:	80 b5       	in	r24, 0x20	; 32
+ 3e6:	8f 7e       	andi	r24, 0xEF	; 239
+ 3e8:	80 bd       	out	0x20, r24	; 32
+ 3ea:	80 b5       	in	r24, 0x20	; 32
+ 3ec:	80 62       	ori	r24, 0x20	; 32
+ 3ee:	80 bd       	out	0x20, r24	; 32
+ 3f0:	80 91 68 00 	lds	r24, 0x0068	; 0x800068 <UARTconfig+0x8>
+ 3f4:	81 30       	cpi	r24, 0x01	; 1
+ 3f6:	29 f4       	brne	.+10     	; 0x402 <__LOCK_REGION_LENGTH__+0x2>
+ 3f8:	80 b5       	in	r24, 0x20	; 32
+ 3fa:	87 7f       	andi	r24, 0xF7	; 247
+ 3fc:	80 bd       	out	0x20, r24	; 32
+ 3fe:	81 e0       	ldi	r24, 0x01	; 1
  400:	08 95       	ret
- 402:	80 e0       	ldi	r24, 0x00	; 0
- 404:	08 95       	ret
- 406:	80 e0       	ldi	r24, 0x00	; 0
- 408:	08 95       	ret
-
-0000040a <UART_SendChar>:
- 40a:	90 91 65 00 	lds	r25, 0x0065	; 0x800065 <UARTconfig+0x5>
- 40e:	91 11       	cpse	r25, r1
- 410:	05 c0       	rjmp	.+10     	; 0x41c <UART_SendChar+0x12>
- 412:	5d 9b       	sbis	0x0b, 5	; 11
- 414:	fe cf       	rjmp	.-4      	; 0x412 <UART_SendChar+0x8>
- 416:	8c b9       	out	0x0c, r24	; 12
- 418:	81 e0       	ldi	r24, 0x01	; 1
+ 402:	82 30       	cpi	r24, 0x02	; 2
+ 404:	59 f4       	brne	.+22     	; 0x41c <__LOCK_REGION_LENGTH__+0x1c>
+ 406:	80 b5       	in	r24, 0x20	; 32
+ 408:	88 60       	ori	r24, 0x08	; 8
+ 40a:	80 bd       	out	0x20, r24	; 32
+ 40c:	81 e0       	ldi	r24, 0x01	; 1
+ 40e:	08 95       	ret
+ 410:	80 e0       	ldi	r24, 0x00	; 0
+ 412:	08 95       	ret
+ 414:	80 e0       	ldi	r24, 0x00	; 0
+ 416:	08 95       	ret
+ 418:	80 e0       	ldi	r24, 0x00	; 0
  41a:	08 95       	ret
- 41c:	91 30       	cpi	r25, 0x01	; 1
- 41e:	21 f4       	brne	.+8      	; 0x428 <UART_SendChar+0x1e>
- 420:	80 93 6a 00 	sts	0x006A, r24	; 0x80006a <__data_end>
- 424:	81 e0       	ldi	r24, 0x01	; 1
- 426:	08 95       	ret
- 428:	80 e0       	ldi	r24, 0x00	; 0
- 42a:	08 95       	ret
+ 41c:	80 e0       	ldi	r24, 0x00	; 0
+ 41e:	08 95       	ret
 
-0000042c <UART_Start>:
- 42c:	53 9a       	sbi	0x0a, 3	; 10
- 42e:	54 9a       	sbi	0x0a, 4	; 10
- 430:	80 91 64 00 	lds	r24, 0x0064	; 0x800064 <UARTconfig+0x4>
- 434:	81 11       	cpse	r24, r1
- 436:	02 c0       	rjmp	.+4      	; 0x43c <UART_Start+0x10>
- 438:	56 98       	cbi	0x0a, 6	; 10
- 43a:	06 c0       	rjmp	.+12     	; 0x448 <UART_Start+0x1c>
- 43c:	81 30       	cpi	r24, 0x01	; 1
- 43e:	f9 f4       	brne	.+62     	; 0x47e <UART_Start+0x52>
- 440:	56 9a       	sbi	0x0a, 6	; 10
- 442:	8f b7       	in	r24, 0x3f	; 63
- 444:	80 68       	ori	r24, 0x80	; 128
- 446:	8f bf       	out	0x3f, r24	; 63
- 448:	80 91 63 00 	lds	r24, 0x0063	; 0x800063 <UARTconfig+0x3>
- 44c:	81 11       	cpse	r24, r1
- 44e:	02 c0       	rjmp	.+4      	; 0x454 <UART_Start+0x28>
- 450:	57 98       	cbi	0x0a, 7	; 10
- 452:	06 c0       	rjmp	.+12     	; 0x460 <UART_Start+0x34>
- 454:	81 30       	cpi	r24, 0x01	; 1
- 456:	a9 f4       	brne	.+42     	; 0x482 <UART_Start+0x56>
- 458:	57 9a       	sbi	0x0a, 7	; 10
- 45a:	8f b7       	in	r24, 0x3f	; 63
- 45c:	80 68       	ori	r24, 0x80	; 128
- 45e:	8f bf       	out	0x3f, r24	; 63
- 460:	80 91 65 00 	lds	r24, 0x0065	; 0x800065 <UARTconfig+0x5>
- 464:	81 11       	cpse	r24, r1
- 466:	03 c0       	rjmp	.+6      	; 0x46e <UART_Start+0x42>
- 468:	55 98       	cbi	0x0a, 5	; 10
- 46a:	81 e0       	ldi	r24, 0x01	; 1
- 46c:	08 95       	ret
- 46e:	81 30       	cpi	r24, 0x01	; 1
- 470:	51 f4       	brne	.+20     	; 0x486 <UART_Start+0x5a>
- 472:	55 9a       	sbi	0x0a, 5	; 10
- 474:	8f b7       	in	r24, 0x3f	; 63
- 476:	80 68       	ori	r24, 0x80	; 128
- 478:	8f bf       	out	0x3f, r24	; 63
- 47a:	81 e0       	ldi	r24, 0x01	; 1
- 47c:	08 95       	ret
- 47e:	80 e0       	ldi	r24, 0x00	; 0
- 480:	08 95       	ret
- 482:	80 e0       	ldi	r24, 0x00	; 0
- 484:	08 95       	ret
- 486:	80 e0       	ldi	r24, 0x00	; 0
- 488:	08 95       	ret
+00000420 <UART_SendChar>:
+ 420:	90 91 65 00 	lds	r25, 0x0065	; 0x800065 <UARTconfig+0x5>
+ 424:	91 11       	cpse	r25, r1
+ 426:	05 c0       	rjmp	.+10     	; 0x432 <UART_SendChar+0x12>
+ 428:	5d 9b       	sbis	0x0b, 5	; 11
+ 42a:	fe cf       	rjmp	.-4      	; 0x428 <UART_SendChar+0x8>
+ 42c:	8c b9       	out	0x0c, r24	; 12
+ 42e:	81 e0       	ldi	r24, 0x01	; 1
+ 430:	08 95       	ret
+ 432:	91 30       	cpi	r25, 0x01	; 1
+ 434:	21 f4       	brne	.+8      	; 0x43e <UART_SendChar+0x1e>
+ 436:	80 93 6a 00 	sts	0x006A, r24	; 0x80006a <__data_end>
+ 43a:	81 e0       	ldi	r24, 0x01	; 1
+ 43c:	08 95       	ret
+ 43e:	80 e0       	ldi	r24, 0x00	; 0
+ 440:	08 95       	ret
 
-0000048a <__udivmodsi4>:
- 48a:	a1 e2       	ldi	r26, 0x21	; 33
- 48c:	1a 2e       	mov	r1, r26
- 48e:	aa 1b       	sub	r26, r26
- 490:	bb 1b       	sub	r27, r27
- 492:	fd 01       	movw	r30, r26
- 494:	0d c0       	rjmp	.+26     	; 0x4b0 <__udivmodsi4_ep>
+00000442 <UART_Start>:
+ 442:	53 9a       	sbi	0x0a, 3	; 10
+ 444:	54 9a       	sbi	0x0a, 4	; 10
+ 446:	80 91 64 00 	lds	r24, 0x0064	; 0x800064 <UARTconfig+0x4>
+ 44a:	81 11       	cpse	r24, r1
+ 44c:	02 c0       	rjmp	.+4      	; 0x452 <UART_Start+0x10>
+ 44e:	56 98       	cbi	0x0a, 6	; 10
+ 450:	06 c0       	rjmp	.+12     	; 0x45e <UART_Start+0x1c>
+ 452:	81 30       	cpi	r24, 0x01	; 1
+ 454:	f9 f4       	brne	.+62     	; 0x494 <UART_Start+0x52>
+ 456:	56 9a       	sbi	0x0a, 6	; 10
+ 458:	8f b7       	in	r24, 0x3f	; 63
+ 45a:	80 68       	ori	r24, 0x80	; 128
+ 45c:	8f bf       	out	0x3f, r24	; 63
+ 45e:	80 91 63 00 	lds	r24, 0x0063	; 0x800063 <UARTconfig+0x3>
+ 462:	81 11       	cpse	r24, r1
+ 464:	02 c0       	rjmp	.+4      	; 0x46a <UART_Start+0x28>
+ 466:	57 98       	cbi	0x0a, 7	; 10
+ 468:	06 c0       	rjmp	.+12     	; 0x476 <UART_Start+0x34>
+ 46a:	81 30       	cpi	r24, 0x01	; 1
+ 46c:	a9 f4       	brne	.+42     	; 0x498 <UART_Start+0x56>
+ 46e:	57 9a       	sbi	0x0a, 7	; 10
+ 470:	8f b7       	in	r24, 0x3f	; 63
+ 472:	80 68       	ori	r24, 0x80	; 128
+ 474:	8f bf       	out	0x3f, r24	; 63
+ 476:	80 91 65 00 	lds	r24, 0x0065	; 0x800065 <UARTconfig+0x5>
+ 47a:	81 11       	cpse	r24, r1
+ 47c:	03 c0       	rjmp	.+6      	; 0x484 <UART_Start+0x42>
+ 47e:	55 98       	cbi	0x0a, 5	; 10
+ 480:	81 e0       	ldi	r24, 0x01	; 1
+ 482:	08 95       	ret
+ 484:	81 30       	cpi	r24, 0x01	; 1
+ 486:	51 f4       	brne	.+20     	; 0x49c <UART_Start+0x5a>
+ 488:	55 9a       	sbi	0x0a, 5	; 10
+ 48a:	8f b7       	in	r24, 0x3f	; 63
+ 48c:	80 68       	ori	r24, 0x80	; 128
+ 48e:	8f bf       	out	0x3f, r24	; 63
+ 490:	81 e0       	ldi	r24, 0x01	; 1
+ 492:	08 95       	ret
+ 494:	80 e0       	ldi	r24, 0x00	; 0
+ 496:	08 95       	ret
+ 498:	80 e0       	ldi	r24, 0x00	; 0
+ 49a:	08 95       	ret
+ 49c:	80 e0       	ldi	r24, 0x00	; 0
+ 49e:	08 95       	ret
 
-00000496 <__udivmodsi4_loop>:
- 496:	aa 1f       	adc	r26, r26
- 498:	bb 1f       	adc	r27, r27
- 49a:	ee 1f       	adc	r30, r30
- 49c:	ff 1f       	adc	r31, r31
- 49e:	a2 17       	cp	r26, r18
- 4a0:	b3 07       	cpc	r27, r19
- 4a2:	e4 07       	cpc	r30, r20
- 4a4:	f5 07       	cpc	r31, r21
- 4a6:	20 f0       	brcs	.+8      	; 0x4b0 <__udivmodsi4_ep>
- 4a8:	a2 1b       	sub	r26, r18
- 4aa:	b3 0b       	sbc	r27, r19
- 4ac:	e4 0b       	sbc	r30, r20
- 4ae:	f5 0b       	sbc	r31, r21
+000004a0 <UART_Stop>:
+ 4a0:	53 98       	cbi	0x0a, 3	; 10
+ 4a2:	54 98       	cbi	0x0a, 4	; 10
+ 4a4:	55 98       	cbi	0x0a, 5	; 10
+ 4a6:	57 98       	cbi	0x0a, 7	; 10
+ 4a8:	56 98       	cbi	0x0a, 6	; 10
+ 4aa:	81 e0       	ldi	r24, 0x01	; 1
+ 4ac:	08 95       	ret
 
-000004b0 <__udivmodsi4_ep>:
- 4b0:	66 1f       	adc	r22, r22
- 4b2:	77 1f       	adc	r23, r23
- 4b4:	88 1f       	adc	r24, r24
- 4b6:	99 1f       	adc	r25, r25
- 4b8:	1a 94       	dec	r1
- 4ba:	69 f7       	brne	.-38     	; 0x496 <__udivmodsi4_loop>
- 4bc:	60 95       	com	r22
- 4be:	70 95       	com	r23
- 4c0:	80 95       	com	r24
- 4c2:	90 95       	com	r25
- 4c4:	9b 01       	movw	r18, r22
- 4c6:	ac 01       	movw	r20, r24
- 4c8:	bd 01       	movw	r22, r26
- 4ca:	cf 01       	movw	r24, r30
- 4cc:	08 95       	ret
+000004ae <__udivmodsi4>:
+ 4ae:	a1 e2       	ldi	r26, 0x21	; 33
+ 4b0:	1a 2e       	mov	r1, r26
+ 4b2:	aa 1b       	sub	r26, r26
+ 4b4:	bb 1b       	sub	r27, r27
+ 4b6:	fd 01       	movw	r30, r26
+ 4b8:	0d c0       	rjmp	.+26     	; 0x4d4 <__udivmodsi4_ep>
 
-000004ce <_exit>:
- 4ce:	f8 94       	cli
+000004ba <__udivmodsi4_loop>:
+ 4ba:	aa 1f       	adc	r26, r26
+ 4bc:	bb 1f       	adc	r27, r27
+ 4be:	ee 1f       	adc	r30, r30
+ 4c0:	ff 1f       	adc	r31, r31
+ 4c2:	a2 17       	cp	r26, r18
+ 4c4:	b3 07       	cpc	r27, r19
+ 4c6:	e4 07       	cpc	r30, r20
+ 4c8:	f5 07       	cpc	r31, r21
+ 4ca:	20 f0       	brcs	.+8      	; 0x4d4 <__udivmodsi4_ep>
+ 4cc:	a2 1b       	sub	r26, r18
+ 4ce:	b3 0b       	sbc	r27, r19
+ 4d0:	e4 0b       	sbc	r30, r20
+ 4d2:	f5 0b       	sbc	r31, r21
 
-000004d0 <__stop_program>:
- 4d0:	ff cf       	rjmp	.-2      	; 0x4d0 <__stop_program>
+000004d4 <__udivmodsi4_ep>:
+ 4d4:	66 1f       	adc	r22, r22
+ 4d6:	77 1f       	adc	r23, r23
+ 4d8:	88 1f       	adc	r24, r24
+ 4da:	99 1f       	adc	r25, r25
+ 4dc:	1a 94       	dec	r1
+ 4de:	69 f7       	brne	.-38     	; 0x4ba <__udivmodsi4_loop>
+ 4e0:	60 95       	com	r22
+ 4e2:	70 95       	com	r23
+ 4e4:	80 95       	com	r24
+ 4e6:	90 95       	com	r25
+ 4e8:	9b 01       	movw	r18, r22
+ 4ea:	ac 01       	movw	r20, r24
+ 4ec:	bd 01       	movw	r22, r26
+ 4ee:	cf 01       	movw	r24, r30
+ 4f0:	08 95       	ret
+
+000004f2 <_exit>:
+ 4f2:	f8 94       	cli
+
+000004f4 <__stop_program>:
+ 4f4:	ff cf       	rjmp	.-2      	; 0x4f4 <__stop_program>
