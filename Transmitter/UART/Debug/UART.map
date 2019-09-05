@@ -491,13 +491,13 @@ END GROUP
  .debug_abbrev  0x00000675      0x193 UART.o
  .debug_abbrev  0x00000808       0x6d UART_config.o
 
-.debug_line     0x00000000      0x8d0
+.debug_line     0x00000000      0x8d1
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x115 E:/program files/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_line    0x00000115      0x19a DIO.o
  .debug_line    0x000002af      0x197 main.o
- .debug_line    0x00000446      0x43b UART.o
- .debug_line    0x00000881       0x4f UART_config.o
+ .debug_line    0x00000446      0x43c UART.o
+ .debug_line    0x00000882       0x4f UART_config.o
 
 .debug_frame    0x00000000      0x148
  *(.debug_frame)
