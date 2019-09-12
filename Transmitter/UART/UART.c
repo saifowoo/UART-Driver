@@ -1,15 +1,17 @@
-/*
- * UART.c
- *
- * Created: 9/2/2019 9:00:00 PM
- *  Author: Saif El-Deen
- */ 
+/*******************************************************************************
+ * File Name	: UART.c                                                       *
+ * Description	: Source file for UART module                                  *
+ * Created on	: 9/2/2019 9:00 PM                                             *
+ * Author		: Saif El-Deen Moustafa                                        *
+ *******************************************************************************/  
+
+
 
 /*******************************************************************************
  *                       	Included Libraries                                 *
  *******************************************************************************/
 #include "UART.h"
-#include "Interrupt.h"
+#include <avr/interrupt.h>
 /*******************************************************************************/
 
 
@@ -19,7 +21,6 @@
  *******************************************************************************/
 static volatile uint8 UARTisr_g = 0;
 static volatile uint8 index = 0;
-static volatile uint8 flag = 0;
 /*******************************************************************************/
 
 
@@ -28,8 +29,22 @@ static volatile uint8 flag = 0;
  *                Interrupt Service Routine Implementation                     *
  *******************************************************************************/
 
+/******************** transmit Compelet Vector ********************/
+ISR (USART_TXC_vect)
+{
+	if (UARTconfig.TxCallBack != NULL)
+	{
+		(*UARTconfig.TxCallBack)();
+	}
+	else
+	{
+		
+	}
+}
+/*******************************************************************************/
+
 /******************** UDR Vector ********************/
-ISR(UART_UDR_VECT)
+ISR(USART_UDRE_vect)
 {
 	if (UARTisr_g != 0)
 	{
@@ -37,14 +52,20 @@ ISR(UART_UDR_VECT)
 		index++;
 		UARTisr_g = 0;
 	}
-	
 }
 /*******************************************************************************/
 
 /******************** Recieve Complete Vector ********************/
-ISR(USART_RXC_vect)
+ISR (USART_RXC_vect)
 {
-	flag = 1;
+	if (UARTconfig.RxCallBack != NULL)
+	{
+		(*UARTconfig.RxCallBack)();
+	}
+	else
+	{
+		
+	}
 }
 /*******************************************************************************/
 
@@ -164,6 +185,7 @@ Status UART_Init (void)
 	
 	return OK;
 }
+/*******************************************************************************/
 
 /*******************************************************************************
  * Function Name:	UART_SendChar
@@ -175,12 +197,23 @@ Status UART_Init (void)
  *******************************************************************************/
 Status UART_SendChar (uint8 a_data)
 {
-	if (UARTconfig.UDRInterrupt == UDRInterruptDisable)
+	if ((UARTconfig.UDRInterrupt == UDRInterruptDisable) && (UARTconfig.TxcInterrupt == TxcInterruptDisable))
 	{
 		while(GetBit(UCSRA,UDRE) == 0);					//wait until UART Data Reg is Empty (UDRE) (0 wait , 1 Empty you can transmit now)
 		UDR = a_data;
 	}
-	else if (UARTconfig.UDRInterrupt == UDRInterruptEnable)
+	else if ((UARTconfig.TxcInterrupt == TxcInterruptEnable) && (UARTconfig.UDRInterrupt == UDRInterruptDisable))
+	{
+		if (GetBit(UCSRA,UDRE) != 0)
+		{
+			UDR = a_data;
+		}
+		else
+		{
+			return NotOk;
+		}
+	}
+	else if ((UARTconfig.UDRInterrupt == UDRInterruptEnable) && (UARTconfig.TxcInterrupt == TxcInterruptDisable))
 	{
 		UARTisr_g = a_data;
 	}
@@ -188,7 +221,6 @@ Status UART_SendChar (uint8 a_data)
 	{
 		return NotOk;
 	}
-	
 	return OK;
 }
 /*******************************************************************************/
@@ -229,7 +261,6 @@ Status UART_Send (const uint8* a_data_ptr)
 }
 /*******************************************************************************/
 
-
 /*******************************************************************************
  * Function Name:	UART_ReceiveChar
  * Description: 	*used to receive a byte
@@ -250,16 +281,7 @@ Status UART_ReceiveChar(uint8* a_data)
 	else if(UARTconfig.RxcInterrupt == RxcInterruptEnable)
 	{
 		/* ISR will be executed */	
-		if (flag == 1)
-		{
-			*a_data = UDR;
-			flag = 0;
-		}
-		else
-		{
-			/* To avoid garbage value */
-			*a_data = 0;
-		}
+		*a_data = UDR;
 	}
 	else
 	{
@@ -339,14 +361,14 @@ Status UART_Start (void)
 	else if (UARTconfig.TxcInterrupt == TxcInterruptEnable)
 	{
 		SetBit(UCSRB,TXCIE);
-		SetBit(SREG,I);
+		sei();
 	}
 	else
 	{
 		return NotOk;
 	}
 	
-	/*Check RX comolete interrupt Enable bit*/
+	/*Check RX complete interrupt Enable bit*/
 	if (UARTconfig.RxcInterrupt == RxcInterruptDisable)
 	{
 		ClrBit(UCSRB,RXCIE);
@@ -354,7 +376,7 @@ Status UART_Start (void)
 	else if (UARTconfig.RxcInterrupt == RxcInterruptEnable)
 	{
 		SetBit(UCSRB,RXCIE);
-		SetBit(SREG,I);
+		sei();
 	}
 	else
 	{
@@ -369,7 +391,7 @@ Status UART_Start (void)
 	else if (UARTconfig.UDRInterrupt == UDRInterruptEnable)
 	{
 		SetBit(UCSRB,UDRIE);
-		SetBit(SREG,I);
+		sei();
 	}
 	else
 	{

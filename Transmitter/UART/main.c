@@ -1,13 +1,15 @@
-/*
- * UART.c
- *
- * Created: 9/2/2019 9:00:00 PM
- *  Author: Saif El-Deen
- */ 
+/*******************************************************************************
+ * File Name	: main.c                                                       *
+ * Description	:                                                              *
+ * Created on	: 9/8/2019 2:00 PM                                             *
+ * Author		: Saif El-Deen Moustafa                                        *
+ *******************************************************************************/ 
 
 #include "UART.h"
 #include "DIO.h"
 #include <util/delay.h>
+
+void UART_ISRCallBackTx (void);
 
 int main(void)
 {
@@ -31,9 +33,15 @@ int main(void)
 			_delay_ms(100);
 		}
 		UART_SendChar(UARTCounter+48);
-		UART_Stop();
+		//UART_Stop();
 		UARTCounter = 0;
 		_delay_ms(1000);
 	}
+}
+
+void UART_ISRCallBackTx (void)
+{
+	DIO_SetPinDirection(LED1,OUTPUT);
+	TglBit(PORTB,PIN5);
 }
 

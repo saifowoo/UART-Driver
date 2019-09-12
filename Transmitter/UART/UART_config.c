@@ -1,9 +1,11 @@
-/*
- * UART_config.c
- *
- * Created: 9/4/2019 1:38:33 PM
- *  Author: kingd
- */ 
+/*******************************************************************************
+ * File Name	: UART_config.c                                                *
+ * Description	: configuration source file for user interface                 *
+ * Created on	: 9/2/2019 9:00 PM                                             *
+ * Author		: Saif El-Deen Moustafa                                        *
+ *******************************************************************************/  
+
+
 
 /*******************************************************************************
  *                       	Included Libraries                                 *
@@ -22,15 +24,19 @@
  *								Data Bits Size (5,6,7,8,9),
  *								Parity Bit (Enable,Disable),
  *								Stop Bits (1,2),
+ *								call back fun for TX interrupt,
+ *								call back fun for RX interrupt
  *								};							
  *******************************************************************************/
 	UART_Cfg UARTconfig = {	4800U,
 							DoubleSpeedDisable,
 							RxcInterruptDisable,
-							TxcInterruptDisable,
+							TxcInterruptEnable,
 							UDRInterruptDisable,
 							DataSize8Bits,
 							ParityDisable,
-							StopBits1 };
+							StopBits1,
+							UART_ISRCallBackTx,
+							NULL };
 /*******************************************************************************/
 

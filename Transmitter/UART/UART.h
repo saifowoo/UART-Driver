@@ -1,9 +1,10 @@
-/*
- * UART.h
- *
- * Created: 9/2/2019 9:00:00 PM
- *  Author: Saif El-Deen
- */ 
+/*******************************************************************************
+ * File Name	: UART.h                                                       *
+ * Description	: header file for UART module                                  *
+ * Created on	: 9/2/2019 9:00 PM                                             *
+ * Author		: Saif El-Deen Moustafa                                        *
+ *******************************************************************************/  
+
 
 
 #ifndef UART_H_
@@ -13,6 +14,8 @@
  *                       	Included Libraries                                 *
  *******************************************************************************/
 #include "UART_config.h"
+#include "typedefs.h"
+#include "bitwise.h"
 /*******************************************************************************/
 
 
@@ -65,6 +68,117 @@
 #define UPM1  (5U)
 #define UMSEL (6U)
 #define URSEL (7U)
+/*******************************************************************************/
+
+
+/*******************************************************************************
+ *                       	TyPe Defines                                       *
+ *******************************************************************************/
+typedef void(* CallBackPtr)(void);
+/*******************************************************************************/
+
+
+
+/*******************************************************************************
+ *                      Preprocessor Macros                                    *
+ *******************************************************************************/
+#define NULL		((void *)0)
+/*******************************************************************************/
+
+
+
+/*******************************************************************************
+ *                      Configuration Enums                                    *
+ *******************************************************************************/
+
+/******************** Check Status enum ********************/
+typedef enum
+{
+	NotOk = 0U,
+	OK = 1U
+}Status;
+
+/******************** Double Speed Mode enum ********************/
+typedef enum
+{
+	DoubleSpeedDisable = 0U,
+	DoubleSpeedEnable = 1U
+}Speed;
+
+/******************** Rx Complete Interrupt enum ********************/
+typedef enum
+{
+	RxcInterruptDisable = 0U,
+	RxcInterruptEnable = 1U
+}RxcIntEn;
+
+/******************** Tx Complete Interrupt enum ********************/
+typedef enum
+{
+	TxcInterruptDisable = 0U,
+	TxcInterruptEnable = 1U
+}TxcIntEn;
+
+/******************** UDR Empty Interrupt enum ********************/
+typedef enum
+{
+	UDRInterruptDisable = 0U,
+	UDRInterruptEnable = 1U
+}UDRIntEn;
+
+/******************** Data Bit Size enum ********************/
+typedef enum
+{
+	DataSize5Bits = 5U,
+	DataSize6Bits = 6U,
+	DataSize7Bits = 7U,
+	DataSize8Bits = 8U,
+	DataSize9Bits = 9U
+}Data;
+
+/******************** Parity Bit enum ********************/
+typedef enum
+{
+	ParityDisable = 0U,
+	ParityOdd = 1U,
+	ParityEven = 2U
+}Parity;
+
+/******************** Stop Bits enum ********************/
+typedef enum
+{
+	StopBits1 = 1U,
+	StopBits2 = 2U
+}Stop;
+/*******************************************************************************/
+
+
+
+/*******************************************************************************
+ * Configuration Structure = {	Baud Rate (2400 -> 250000),
+ *								Double Speed Mode (Enable,Disable),
+ *								RX Complete Interrupt (Enable,Disable),
+ *								TX Complete Interrupt (Enable,Disable),
+ *								UDR Empty Interrupt (Enable,Disable),
+ *								Data Bits Size (5,6,7,8,9),
+ *								Parity Bit (Enable,Disable),
+ *								Stop Bits (1,2),
+ *								};							
+ *******************************************************************************/
+typedef struct{
+	uint16 baudrate;
+	Speed   DoubleSpeed;
+	RxcIntEn   RxcInterrupt;
+	TxcIntEn   TxcInterrupt;
+	UDRIntEn   UDRInterrupt;
+	Data   DataSize;
+	Parity   ParityBit;
+	Stop   StopBits;
+	CallBackPtr		TxCallBack;
+	CallBackPtr		RxCallBack;
+}UART_Cfg;
+
+extern UART_Cfg UARTconfig;
 /*******************************************************************************/
 
 
@@ -149,6 +263,5 @@ extern Status UART_Start (void);
  *******************************************************************************/
 extern Status UART_Stop (void);
 /*******************************************************************************/
-
 
 #endif /* UART_H_ */

@@ -34,12 +34,34 @@
 
 #define I			7
 
-#define INT2_vect_num		3
-#define UART_TXC_VECT		15
-#define UART_RXC_VECT		13
-#define UART_UDR_VECT		14
+#define INT2_vect				3
+#define TIMER2_COMP_vect		4
+#define TIMER2_OVF_vect			5
+#define TIMER1_CAPT_vect		6
+#define TIMER1_COMPA_vect		7
+#define TIMER1_COMPB_vect		8
+#define TIMER1_OVF_vect			9
+#define TIMER0_COMP_vect		10
+#define TIMER0_OVF_vect			11
+#define UART_RXC_VECT			13
+#define UART_UDR_VECT			14
+#define UART_TXC_VECT			15
 
-#define ISR(INTNUM) void __vector_##INTNUM (void) __attribute__ ((signal,used, externally_visible));\
-void __vector_##INTNUM (void)
+# define sei()  __asm__ __volatile__ ("sei" ::: "memory")
+
+/*#define ISR(INTNUM) void __vector_##INTNUM (void) __attribute__ ((signal,used));\
+void __vector_##INTNUM (void)*/
+
+#define Timer_ISR	__vector_10
+void Timer_ISR(void) __attribute__ ((signal, used));
+
+#define RXC_ISR	__vector_13
+void Timer_ISR(void) __attribute__ ((signal, used));
+
+#define TXC_ISR	__vector_15
+void Timer_ISR(void) __attribute__ ((signal, used));
+
+#define UDR_ISR	__vector_14
+void Timer_ISR(void) __attribute__ ((signal, used));
 
 #endif /* INTERRUPT_H_ */
